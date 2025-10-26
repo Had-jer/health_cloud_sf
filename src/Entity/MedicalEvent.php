@@ -27,7 +27,14 @@ class MedicalEvent
 
     #[ORM\ManyToOne(inversedBy: 'medicalEvents')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $user = null;
+    private ?User $patient  = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $eventCategory = null;
+
+    #[ORM\ManyToOne(inversedBy: 'medicalEvents')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $doctor = null;
 // LA RELATION AVEC MEDICALEVENTSUMMARY -> ONE OT MANY 
     /**
      * @var Collection<int, MedicalEventSummary>
@@ -35,9 +42,9 @@ class MedicalEvent
     #[ORM\OneToMany(targetEntity: MedicalEventSummary::class, mappedBy: 'medicalEvent')]
     private Collection $medicalSummaries;
 
-    #[ORM\ManyToOne(inversedBy: 'medicalEvents')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?MedicalEventCategory $medicalEventCategory = null;
+    // #[ORM\ManyToOne(inversedBy: 'medicalEvents')]
+    // #[ORM\JoinColumn(nullable: false)]
+    // private ?MedicalEventCategory $medicalEventCategory = null;
 
    
 
@@ -66,6 +73,19 @@ class MedicalEvent
         return $this;
     }
 
+    public function getEventCategory(): ?\DateTime
+    {
+        return $this->eventCategory;
+    }
+
+    public function setEventCategory(string $eventCategory): static
+    {
+        $this->eventCategory= $eventCategory;
+
+        return $this;
+    }
+
+
     public function getStatus(): ?string
     {
         return $this->status;
@@ -80,14 +100,25 @@ class MedicalEvent
 
    
 
-    public function getUser(): ?User
+    public function getDoctor(): ?User
     {
-        return $this->user;
+        return $this->doctor;
     }
 
-    public function setUser(?User $user): static
+    public function setDoctor(?User $user): static
     {
-        $this->user = $user;
+        $this->doctor = $user;
+
+        return $this;
+    }
+    public function getPatient(): ?User
+    {
+        return $this->patient;
+    }
+
+    public function setPatient(?User $user): static
+    {
+        $this->patient = $user;
 
         return $this;
     }
@@ -124,15 +155,15 @@ class MedicalEvent
 
  
 
-    public function getMedicalEventCategory(): ?MedicalEventCategory
-    {
-        return $this->medicalEventCategory;
-    }
+    // public function getMedicalEventCategory(): ?MedicalEventCategory
+    // {
+    //     return $this->medicalEventCategory;
+    // }
 
-    public function setMedicalEventCategory(?MedicalEventCategory $medicalEventCategory): static
-    {
-        $this->medicalEventCategory = $medicalEventCategory;
+    // public function setMedicalEventCategory(?MedicalEventCategory $medicalEventCategory): static
+    // {
+    //     $this->medicalEventCategory = $medicalEventCategory;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 }

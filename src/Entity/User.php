@@ -250,8 +250,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (!$this->medicalEvents->contains($medicalEvent)) {
             $this->medicalEvents->add($medicalEvent);
-            $medicalEvent->setUser($this);
+            $medicalEvent->setDoctor($this);
+            $medicalEvent->setPatient($this);
         }
+        
 
         return $this;
     }
@@ -260,8 +262,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->medicalEvents->removeElement($medicalEvent)) {
             // set the owning side to null (unless already changed)
-            if ($medicalEvent->getUser() === $this) {
-                $medicalEvent->setUser(null);
+            if ($medicalEvent->getDoctor() === $this) {
+                $medicalEvent->setDoctor(null);
+            }
+            if ($medicalEvent->getPatient() === $this) {
+                $medicalEvent->setPatient(null);
             }
         }
 
