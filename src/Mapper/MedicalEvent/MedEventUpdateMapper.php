@@ -10,18 +10,14 @@ class MedEventUpdateMapper
 {
     public function map(MedEventUpdateDto $dto, MedicalEvent $event): MedicalEvent
     {
-        
-        if (null !== $dto->getStatus()) {
-            $allowedStatuses = ['scheduled', 'done', 'canceled'];
 
-            if (!in_array($dto->getStatus(), $allowedStatuses, true)) {
-                throw new NotFoundHttpException('Le statut doit être "scheduled", "done" ou "canceled"');
-            }
+        if (null !== $dto->getStatus()) {
+
 
             $event->setStatus($dto->getStatus());
         }
 
-     
+
 
         return $event;
     }

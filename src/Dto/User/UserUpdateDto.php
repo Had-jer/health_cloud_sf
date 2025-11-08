@@ -7,11 +7,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 
-// #[UniqueEntity(
-//     fields: ['email'],
-//     entityClass: User::class,
-//     message: 'Cet email n\'est plus disponible'
-// )]
+
 class UserUpdateDto
 {
     public function __construct(

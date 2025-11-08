@@ -10,25 +10,33 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 #[UniqueEntity(fields: ['email'], message: "Cet email n'est plus disponible")]
+
+
+
 
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['medical_event:read', 'user:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180)]
+    #[Groups(['medical_event:read', 'user:read'])]
     private ?string $email = null;
 
     /**
      * @var list<string> The user roles
      */
     #[ORM\Column]
+    #[Groups(['medical_event:read', 'user:read'])]
     private array $roles = [];
 
     /**
@@ -38,13 +46,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups(['medical_event:read', 'user:read'])]
     private ?string $first_name = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups(['medical_event:read', 'user:read'])]
     private ?string $last_name = null;
     
     // status (patient/doctor)
     #[ORM\Column(length: 50)]
+    #[Groups(['medical_event:read', 'user:read'])]
     private ?string $status = null;
 
      // spécialité médicale
@@ -52,10 +63,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      private ?string $medicalSpeciality = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Groups(['medical_event:read', 'user:read'])]
     private ?\DateTime $birth_date = null;
 
     #[ORM\Column]
+    #[Groups(['medical_event:read', 'user:read'])]
     private ?string $phone_number = null;
+
+
 // LA RELATION AVEC HEALTH_RECORD => ONETOONE
     #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
     private ?HealthRecord $healthRecord = null;

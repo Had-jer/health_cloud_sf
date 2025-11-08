@@ -29,17 +29,18 @@ class UserController extends AbstractController
         private UserUpdateMapper $userUpdateMapper,
 
     ) {}
-  // read user
-  #[Route('/profile', name: 'show_profile', methods: ['GET'])]
-  public function show(): JsonResponse {
-      $user =  $this->getUser();
+    // read user
+    #[Route('/profile', name: 'show_profile', methods: ['GET'])]
+    public function show(): JsonResponse
+    {
+        $user =  $this->getUser();
 
-      return $this->json(
-        $user,
-        Response::HTTP_OK,
-    );
-  }
-
+        return $this->json(
+            $user,
+            Response::HTTP_OK,
+        );
+    }
+    //  CREATE USER 
     #[Route('/register', name: 'register', methods: ['POST'])]
     public function register(
         #[MapRequestPayload]
@@ -61,7 +62,7 @@ class UserController extends AbstractController
             Response::HTTP_CREATED,
         );
     }
-  
+
     // update user
 
     #[Route('/profile', name: 'update', methods: ['PATCH'])]
@@ -73,29 +74,32 @@ class UserController extends AbstractController
         $email = $connectedUser->getUserIdentifier();
         $user = $this->userRepository->findOneBy(['email' => $email]);
 
-       $this->userUpdateMapper->map($dto, $user);
+        $this->userUpdateMapper->map($dto, $user);
 
         $this->em->flush();
 
-        return $this->json(
-    
-                $user,
-                Response::HTTP_OK,
-            
-        );
-    }
-
-     // delete user
-  #[Route('/profile', name: 'delete', methods: ['DELETE'])]
-  public function delete(): JsonResponse {
-      $user =  $this->getUser();
-
-      $this->em->remove($user);
-      $this->em->flush();
-
-      return $this->json(
-        [],
+        return $this->json([
+            'id' => $user->getId(),
+            'email' => $user->getEmail(),
+            'firstName' => $user->getFirstName(),
+            'lastName' => $user->getLastName(),
+        ],
         Response::HTTP_OK,
     );
-  }
+    }
+
+    // delete user
+    #[Route('/profile', name: 'delete', methods: ['DELETE'])]
+    public function delete(): JsonResponse
+    {
+        $user =  $this->getUser();
+
+        $this->em->remove($user);
+        $this->em->flush();
+
+        return $this->json(
+            [],
+            Response::HTTP_OK,
+        );
+    }
 }

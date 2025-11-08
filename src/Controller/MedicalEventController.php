@@ -13,6 +13,7 @@ use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpFoundation\Response;
 use App\Dto\MedicalEvent\MedEventCreateDto;
 use App\Dto\MedicalEvent\MedEventUpdateDto;
+use App\Entity\MedicalEvent;
 use App\Mapper\MedicalEvent\MedEventCreateMapper;
 use App\Mapper\MedicalEvent\MedEventUpdateMapper;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -28,9 +29,9 @@ class MedicalEventController extends AbstractController
         private UserRepository $userRepository,
         private EntityManagerInterface $em,
         private MedEventCreateMapper $medEventCreateMapper,
-        private readonly MedicalEventRepository $medicalEventRepository,
-        private readonly MedEventUpdateMapper $medEventUpdateMapper,
-        
+        private MedicalEventRepository $medicalEventRepository,
+        private MedEventUpdateMapper $medEventUpdateMapper,
+
 
 
     ) {}
@@ -55,26 +56,78 @@ class MedicalEventController extends AbstractController
         );
     }
 
-    // // UPDATE DOCTOR MEDICAL EVENT 
-    // #[Route('/update', name: 'update', methods: ['PATCH'])]
-    // public function update(
-    //     int $id,
-    //     #[MapRequestPayload]
-    //     MedEventUpdateDto $dto
-    // ): JsonResponse {
+    // UPDATE DOCTOR  ==>  MEDICAL EVENT 
+    #[Route('/update/{id}', name: 'update', methods: ['PATCH'])]
+    public function update(
+        MedicalEvent $medicalEvent,
+        #[MapRequestPayload]
+        MedEventUpdateDto $dto
+    ): JsonResponse {
 
-    //     $event = $this->medicalEventRepository->find($id);
+        $event = $this->medicalEventRepository->find($medicalEvent);
 
-    //     if (!$event) {
-    //         throw new NotFoundHttpException('Événement médical introuvable');
-    //     }
+        if (!$event) {
+            throw new NotFoundHttpException('Événement médical introuvable');
+        }
 
-    //     $this->medicalEventRepository ->map($dto, $event);
+        $this->medEventUpdateMapper->map($dto, $event);
 
-    //     $this->em->flush();
+        $this->em->flush();
 
-    //     return $this->json($event, Response::HTTP_OK);
+        return $this->json(
+            $event,
+            Response::HTTP_OK,
+            context: ['groups' => ['medical_event:read']]
+        );
+    }
+    // READ : medical event 
+    #[Route('', name: 'list', methods: ['GET'])]
+    public function list(): JsonResponse
+    {
+        // récup l'utilisateur connecté 
+        $connectedUser =  $this->getUser();
+        $email = $connectedUser->getUserIdentifier();
+        $user = $this->userRepository->findOneBy(['email' => $email]);
 
-      
-    // }
+        // Récupérer tous les événements médicaux
+        $medicalEvents = $this->medicalEventRepository->findByUser($user);
+
+        
+        return $this->json(
+            $medicalEvents,
+            Response::HTTP_OK,
+            context: ['groups' => ['medical_event:read']]
+        );
+    }
+    // READ: AFFICHER UN SEUL MEDICALEVENT BY ID 
+    #[Route('/{id}', name: 'show', methods: ['GET'])]
+    public function show(MedicalEvent $medicalEvent): JsonResponse
+    {
+        $connectedUser =  $this->getUser();
+        $email = $connectedUser->getUserIdentifier();
+        $user = $this->userRepository->findOneBy(['email' => $email]);
+
+        // Récupérer tous les événements médicaux
+    
+
+        return $this->json(
+            $this->medicalEventRepository->findOneByUser($user, $medicalEvent),
+            Response::HTTP_OK,
+            context: ['groups' => ['medical_event:read']]
+        );
+    }
+       // delete medicalEvent
+       #[Route('/{id}', name: 'delete', methods: ['DELETE'])]
+       public function delete(MedicalEvent $medicalEvent): JsonResponse
+       {
+          
+   
+           $this->em->remove($medicalEvent);
+           $this->em->flush();
+   
+           return $this->json(
+               [],
+               Response::HTTP_OK,
+           );
+       }
 }
