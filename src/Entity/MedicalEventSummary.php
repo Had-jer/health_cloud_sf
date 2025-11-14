@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Repository\MedicalEventSummaryRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 
 #[ORM\Entity(repositoryClass: MedicalEventSummaryRepository::class)]
 class MedicalEventSummary
@@ -12,19 +14,25 @@ class MedicalEventSummary
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['medical_event:read'])]
+
     private ?int $id = null;
 
-    // #[ORM\Column(type: Types::SMALLINT)]
-    // private ?int $med_event_sum_id = null;
+    
 
     #[ORM\Column(length: 255)]
+    #[Groups(['medical_event:read'])]
+
     private ?string $content = null;
 
     #[ORM\Column]
+    #[Groups(['medical_event:read'])]
+
     private ?\DateTime $created_at = null;
 
     #[ORM\ManyToOne(inversedBy: 'medicalSummaries')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['medical_event:read'])]
     private ?MedicalEvent $medicalEvent = null;
 
     public function getId(): ?int

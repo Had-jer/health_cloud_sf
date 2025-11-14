@@ -43,48 +43,7 @@ class MedicalEvent
 
     #[ORM\OneToMany(targetEntity: MedicalEventSummary::class, mappedBy: 'medicalEvent')]
     #[Groups(['medical_event:read'])]
-//     private Collection $medicalSummaries;
-//     #[ORM\Id]
-//     #[ORM\GeneratedValue]
-//     #[ORM\Column]
-//     private ?int $id = null;
 
-  
-
-//     #[ORM\Column(type: Types::DATE_MUTABLE)]
-//     private ?\DateTime $date = null;
-
-//     #[ORM\Column(length: 255)]
-//     private ?string $status = null;
-//     // LA RELATION AVEC USER => MANYTOONE 
-
-//     #[ORM\ManyToOne(inversedBy: 'medicalEvents')]
-//     #[ORM\JoinColumn(nullable: false)]
-//     private ?User $patient  = null;
-
-//     #[ORM\Column(length: 255)]
-//     private ?string $eventCategory = null;
-
-//     #[ORM\ManyToOne(inversedBy: 'medicalEvents')]
-//     #[ORM\JoinColumn(nullable: false)]
-//     private ?User $doctor = null;
-// // LA RELATION AVEC MEDICALEVENTSUMMARY -> ONE OT MANY 
-//     /**
-//      * @var Collection<int, MedicalEventSummary>
-//      */
-    // #[ORM\OneToMany(targetEntity: MedicalEventSummary::class, mappedBy: 'medicalEvent')]
-    // private Collection $medicalSummaries;
-
-    // #[ORM\ManyToOne(inversedBy: 'medicalEvents')]
-    // #[ORM\JoinColumn(nullable: false)]
-    // private ?MedicalEventCategory $medicalEventCategory = null;
-
-   
-
-    // public function __construct()
-    // {
-    //     $this->medicalSummaries = new ArrayCollection();
-    // }
 
  
     public function getId(): ?int
@@ -156,36 +115,7 @@ class MedicalEvent
         return $this;
     }
 
-    /**
-     * @return Collection<int, MedicalEventSummary>
-     */
-    // public function getMedicalSummaries(): Collection
-    // {
-    //     return $this->medicalSummaries;
-    // }
-
-    // public function addMedicalSummary(MedicalEventSummary $medicalSummary): static
-    // {
-    //     if (!$this->medicalSummaries->contains($medicalSummary)) {
-    //         $this->medicalSummaries->add($medicalSummary);
-    //         $medicalSummary->setMedicalEvent($this);
-    //     }
-
-    //     return $this;
-    // }
-
-    // public function removeMedicalSummary(MedicalEventSummary $medicalSummary): static
-    // {
-    //     if ($this->medicalSummaries->removeElement($medicalSummary)) {
-    //         // set the owning side to null (unless already changed)
-    //         if ($medicalSummary->getMedicalEvent() === $this) {
-    //             $medicalSummary->setMedicalEvent(null);
-    //         }
-    //     }
-
-    //     return $this;
-    // }
-
+   
  
 
    

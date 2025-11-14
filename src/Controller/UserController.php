@@ -38,6 +38,8 @@ class UserController extends AbstractController
         return $this->json(
             $user,
             Response::HTTP_OK,
+            context: ['groups' => ['user:read']]
+            
         );
     }
     //  CREATE USER 
@@ -60,6 +62,8 @@ class UserController extends AbstractController
                 'id' => $user->getId(),
             ],
             Response::HTTP_CREATED,
+            context: ['groups' => ['user:read']]
+
         );
     }
 
@@ -85,6 +89,8 @@ class UserController extends AbstractController
             'lastName' => $user->getLastName(),
         ],
         Response::HTTP_OK,
+        context: ['groups' => ['user:read']]
+
     );
     }
 
@@ -100,6 +106,7 @@ class UserController extends AbstractController
         return $this->json(
             [],
             Response::HTTP_OK,
+
         );
     }
 }
